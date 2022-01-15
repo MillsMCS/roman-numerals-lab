@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class RomanNumeral {
 	/**
-	 * The lowest number than can be represented.
+	 * The lowest number that can be represented.
 	 */
 	public static final int MIN_VALUE = 1;
 	
@@ -47,7 +47,7 @@ public class RomanNumeral {
 					"Value out of bounds [" + MIN_VALUE + "..." + MAX_VALUE + "]: " + value);
 		}
 		this.value = value;
-		text = convertToText(value);
+		text = convertFromIntToString(value);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class RomanNumeral {
 	 */
 	public RomanNumeral(String text) {
 		this.text = text;
-		value = convertFromString(text);
+		value = convertFromStringToInt(text);
 		if (value < MIN_VALUE || value > MAX_VALUE) {
 			throw new IllegalArgumentException(
 					"Value out of bounds [" + MIN_VALUE + "..." + MAX_VALUE + "]: " + value);
@@ -82,12 +82,12 @@ public class RomanNumeral {
 	}
 	
 	@VisibleForTesting
-	protected static int convertFromString(String s) {
+	protected static int convertFromStringToInt(String s) {
 		return 0;
 	}
 	
 	@VisibleForTesting
-	protected static String convertToText(int n) {
+	protected static String convertFromIntToString(int n) {
 		return null;
 	}
 }
