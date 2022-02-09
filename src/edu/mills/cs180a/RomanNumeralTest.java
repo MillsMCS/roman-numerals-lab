@@ -15,8 +15,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-
-class RomanNumeralTest {
+class RomanNumeralTests {
 
 	@ParameterizedTest
 	@CsvSource({"XI,11", "L,50", "X,10", "MD,1500", "MX,1010", "MMMMMMMMM,9000","MMMMMMMMMCMXCIX,9999", "MMMMMMMMMM,10000"}) 
@@ -78,36 +77,41 @@ class RomanNumeralTest {
 
 	//String to int tests
 	@ParameterizedTest
-	@CsvSource (value = { "X,10", "C,100", "IV,4", "CMXCIX, 999", "II,2", "MMII, 2002", "CDXXII, 422", "MMMMMMMMCMXCIX, 8999"})
-	void testConvertFromStringToInt(String input, int expected) {
-		int actualValue = convertFromStringToInt(input);
-		assertEquals(expected, actualValue);
-	}		
-
-	@Test
-	void testInvalidStringInput() {
+	@ValueSource(ints = {-100, 0, 5, 10000})
+	void testIntInputIsOutOfBounds(int invalidInt) {
 		assertThrows(IllegalArgumentException.class,
-				() -> convertFromStringToInt(" "));
-		assertThrows(IllegalArgumentException.class,
-				() -> convertFromStringToInt("one"));
+				() -> new RomanNumeral(invalidInt));
 	}
 
-	//letters other than Roman numerals
-	@Test
-	void testInvalidString() {
-		assertThrows(IllegalArgumentException.class,
-				() -> convertFromStringToInt("J"));
-	}
-
-	//Int to string tests
+	// Testing for convertFromStringToInt
 	@ParameterizedTest
-	@CsvSource (value = { "9, IX", "540, DXL", "999, CMXCIX", "53, LIII", "5, V", "424, CDXXIV", "113, CXIII", "2000, MM" })
-	void testConvertFromIntToString(int input, String expected) {
-		String actualValue = convertFromIntToString(input);
-		assertEquals(expected, actualValue);
+	@CsvSource({"I,1", "V,5", "X,10", "L,50", "C,100", "D,500", "M,1000"})
+	void testStringToIntValidRomanSymbol(String romanNumeral, int expected) {
+		int actual = convertFromStringToInt(romanNumeral);
+		assertEquals(expected, actual);
+	}
+	
+	@ParameterizedTest
+	@CsvSource({"i,1", "v,5", "x,10", "l,50", "c,100", "d,500", "m,1000"})
+	void testStringToIntValidLowercaseRomanSymbol(String romanNumeral, int expected) {
+		int actual = convertFromStringToInt(romanNumeral);
+		assertEquals(expected, actual);
+	}
+	
+	@ParameterizedTest
+	@ValueSource(strings = {"@", "V!", "123", "ten", "vi"})
+	void testStringToIntInvalidRomanNumeral(String invalidInput) {
+		assertThrows(IllegalArgumentException.class,
+				() -> convertFromStringToInt(invalidInput));
+	}
+	
+	@ParameterizedTest
+	@ValueSource(strings = {"IIII", "VIIII", "xxxx", "CMXCIX", "IM"})
+	void testStringToIntNonStandardRomanNumeral(String invalidInput) {
+		assertThrows(IllegalArgumentException.class,
+				() -> convertFromStringToInt(invalidInput));
 	}
 
-	@ParameterizedTest
 	@ValueSource(ints = {0, -1, 10000})
 	void testConvertFromIntToStringThrowsExceptionForOutOfRange(int n) {
 		assertThrows(IllegalArgumentException.class,
@@ -121,10 +125,77 @@ class RomanNumeralTest {
 				() -> convertFromStringToInt(s));
 	}
 	
+	@ParameterizedTest
 	@ValueSource(ints = {-1, 0, 10000})
 	void testOutOfBoundsNumbers(int num) {
 		assertThrows(IllegalArgumentException.class,
 				() -> convertFromIntToString(num));
 	}
+	
+	@ParameterizedTest
+	@CsvSource({"II,2", "III,3", "XI,11", "lii,52", "DCXIII,613"})
+	void testStringToIntAdditivePrinciple(String additiveNumeral, int expected) {
+		int actual = convertFromStringToInt(additiveNumeral);
+		assertEquals(expected, actual);
+	}
+	
+	@ParameterizedTest
+	@CsvSource({"iv, 4", "IV,4", "IX,9", "XL,40", "XC,90", "CD,400", "CM,900"})
+	void testStringToIntSubtractivePrinciple(String subtractiveNumeral, int expected) {
+		int actual = convertFromStringToInt(subtractiveNumeral);
+		assertEquals(expected, actual);
+	}
+	
+	// Testing for convertFromIntToString
+	@ParameterizedTest
+	@CsvSource({"1,I", "5,V", "10,X", "50,L", "100,C", "500,D", "1000,M"})
+	void testIntToStringIsValidRomanSymbol(int n, String expected) {
+		String actual = convertFromIntToString(n);
+		assertEquals(expected, actual);
+	}
+	
+	@ParameterizedTest
+	@CsvSource({"4,IV", "9,IX", "40,XL", "90,XC", "400,CD", "900,CM"})
+	void testIntToStringSubtractivePrinciple(int n, String expected) {
+		String actual = convertFromIntToString(n);
+		assertEquals(expected, actual);
+	}
+	
+	@ParameterizedTest
+	@CsvSource({"2,II", "3,III", "11,XI", "1507,MDVII"})
+	void testIntToStringAdditivePrinciple(int n, String expected) {
+		String actual = convertFromIntToString(n);
+		assertEquals(expected, actual);
+	}
+
+
+    @Test
+    void stringToInt() {
+        assertEquals(5, convertFromStringToInt("V"));
+        assertEquals(10, convertFromStringToInt("X"));
+        assertEquals(50, convertFromStringToInt("L"));
+    }
+        
+    @ParameterizedTest
+    @CsvSource({"x,10", "v,5", "L,50"})
+    void ParamStringToInt(String input, int expected) {
+        String actual = input.toUpperCase();
+        assertEquals(expected, convertFromStringToInt(actual));
+    }
+    
+    @Test
+    void intToString() {
+        assertEquals("V", convertFromIntToString(5));
+        assertEquals("X", convertFromIntToString(10));
+        assertEquals("L", convertFromIntToString(50));
+    }
+    
+    @ParameterizedTest
+    @CsvSource({"1,I", "5,V", "10,X"})
+    void ParamIntToString(int input, String expected) {
+        assertEquals(expected, convertFromIntToString(input));
+    }
+
 
 }
+
