@@ -1,21 +1,40 @@
 package edu.mills.cs180a;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static edu.mills.cs180a.RomanNumeral.convertFromIntToString;
 import static edu.mills.cs180a.RomanNumeral.convertFromStringToInt;
-
-import static edu.mills.cs180a.RomanNumeral.convertFromIntToString;
-import static edu.mills.cs180a.RomanNumeral.convertFromStringToInt;
-
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class RomanNumeralTests {
+
+    @ParameterizedTest
+	@CsvSource( {"I, 1", "V , 5", "X , 10", "L , 50", "C , 100", "D, 500", "M , 1000"} )
+	void testEqualityConvertFromStringToInt(String input, int expected) {
+    	int actual = convertFromStringToInt(input);
+		assertEquals(expected, actual);
+	}
+	
+	@ParameterizedTest
+	@ValueSource(ints = {0, -1, -2, -4}) 
+	void testIllegalArgumentForConvertIntToString(int n) {
+		assertThrows(IllegalArgumentException.class, () -> convertFromIntToString(n));	
+	}
+	
+	@Test
+	void testConvertFromIntToStringIsNotNull() {
+		assertNotNull(convertFromIntToString(0));
+	}
+	
+	
+	@ParameterizedTest
+	@CsvSource({"1 , I", "5 , V", " 10 , X", "50 , L", " 100 , C", "500 , D", "1000 , M"})
+	void testEqualityConvertFromIntToString(int input, String expected) {
+		String actual = convertFromIntToString(input);
+		assertEquals(expected, actual);
+	}
 
 	@ParameterizedTest
 	@CsvSource({"XI,11", "L,50", "X,10", "MD,1500", "MX,1010", "MMMMMMMMM,9000","MMMMMMMMMCMXCIX,9999", "MMMMMMMMMM,10000"}) 
@@ -73,7 +92,6 @@ class RomanNumeralTests {
 		String actualValue = convertFromIntToString(input);
 		assertEquals(expected, actualValue);
 	}
-
 
 	//String to int tests
 	@ParameterizedTest
@@ -195,7 +213,6 @@ class RomanNumeralTests {
     void ParamIntToString(int input, String expected) {
         assertEquals(expected, convertFromIntToString(input));
     }
-
 
 }
 
