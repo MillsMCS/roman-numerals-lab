@@ -1,12 +1,12 @@
 package edu.mills.cs180a;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Immutable Roman Numeral, representing a value between {@link #MIN_VALUE} and
  * {@link #MAX_VALUE}, inclusive.
  * 
- * @author Ellen Spertus
  */
 public class RomanNumeral {
 	/**
@@ -81,13 +81,41 @@ public class RomanNumeral {
 		return text;
 	}
 	
+	
+	/**
+	 * Takes a Roman Numeral and converts it to an integer.
+	 * @param s the Roman Numeral inputed to convert to an integer
+	 * @return Integer conversion of s
+	 */
 	@VisibleForTesting
 	protected static int convertFromStringToInt(String s) {
-		return 0;
+		s = s.toUpperCase();
+		int ans = LETTERS_TO_VALUES.get(s.charAt(s.length()-1));
+		
+		for(int i = 0; i < MAX_VALUE; i++) {			
+			return LETTERS_TO_VALUES.get(s.charAt(i));
+		}
+		return ans;
 	}
 	
+	/**
+	 * Takes a number and converts it to Roman Numeral
+	 * @param n the number inputed to convert to Roman Numeral
+	 * @return the Roman Numeral of n
+	 */
 	@VisibleForTesting
 	protected static String convertFromIntToString(int n) {
-		return null;
+		String ans = "";
+		
+		for(Entry<Character, Integer> entry : LETTERS_TO_VALUES.entrySet()) {
+			if(entry.getValue() == n) {
+				ans = entry.getKey().toString();
+				return ans;
+			}
+		}
+		
+		return ans.toString();
 	}
+	
+	
 }
