@@ -12,13 +12,13 @@ class RomanNumeralTests {
 	
 	//Does the test convert Strings to ints?
 	@ParameterizedTest
-	@CsvSource({"II,2.0","III,4", "VI,5", "XII,12"})
-	void string2IntConvert(String expected, int actual)
+	@CsvSource({"II,2","III,4", "VI,5", "XII,12"})
+	void string2IntConvert(String s, int expected)
 	{
-		int input = RomanNumeral.convertFromStringToInt(expected);
+		int actual = RomanNumeral.convertFromStringToInt(s);
 		
 		
-		assertEquals(input,actual);
+		assertEquals(expected, actual);
 	}
 	
 	
@@ -33,9 +33,9 @@ class RomanNumeralTests {
 	}	
 	
 	@ParameterizedTest
-	@ValueSource(ints = {-4,-10,0,-18}, strings = {"four","V","XVIII"})
-	void testExceptionsThrown(int i, String s) {
-		assertThrows(IllegalArgumentException.class,() -> int2StringConvert(i,s));
+	@CsvSource({"-4","0","99999"})
+	void testExceptionsThrown(int i) {
+		assertThrows(IllegalArgumentException.class,() -> RomanNumeral.convertFromIntToString(i));
 	}
 	
 	//0 or 1 million
