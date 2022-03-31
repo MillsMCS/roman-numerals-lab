@@ -90,13 +90,6 @@ public class RomanNumeral {
 		
 		char [] romanNums = s.toCharArray();
 		
-		return convertString2IntHelper(romanNums);
-
-	}
-	
-	protected static int convertString2IntHelper (char[] romanNums)
-	{
-		
 		//Add exception later
 		int numericValue = 0;
 		
@@ -110,21 +103,20 @@ public class RomanNumeral {
 	
 	
 	@VisibleForTesting
-	protected static String convertFromIntToString(int n) {
+	protected static String convertFromIntToString(int num) {
 		
-		
-		return convertFromIntToStringHelper(n);
-	}
-	
-	protected static String convertFromIntToStringHelper(int i)
-	{
+		if(num > MAX_VALUE || num < MIN_VALUE)
+		{
+			throw new IllegalArgumentException("Number out of bounds");
+		}
+
 		StringBuilder str = new StringBuilder();
 		
-		for (int t=0; t <= roman.length; i++){
-			if(i > numerals[t]) 
+		for (int i=roman.length-1; i >= 0; i--){
+			while(num >= numerals[i]) 
 			{
-				str.append(roman[t]);
-				i -= numerals[t];
+				str.append(roman[i]);
+				num -= numerals[i];
 			}
 				
 		}
