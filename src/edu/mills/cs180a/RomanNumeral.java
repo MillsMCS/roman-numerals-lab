@@ -89,14 +89,11 @@ public class RomanNumeral {
 	protected static int convertFromStringToInt(String s) {
 		
 		char [] romanNums = s.toCharArray();
-		
-		//Add exception later
+
 		int numericValue = 0;
 		
 		for(char c: romanNums)
-		{
-			numericValue += LETTERS_TO_VALUES.get(c);
-		}
+		{ numericValue += LETTERS_TO_VALUES.get(c); }
 		
 		return numericValue;
 	}

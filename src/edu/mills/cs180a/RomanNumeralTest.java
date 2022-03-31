@@ -16,8 +16,6 @@ class RomanNumeralTests {
 	void string2IntConvert(String s, int expected)
 	{
 		int actual = RomanNumeral.convertFromStringToInt(s);
-		
-		
 		assertEquals(expected, actual);
 	}
 	
