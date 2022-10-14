@@ -1,6 +1,5 @@
 package edu.mills.cs180a;
-
-import java.util.Map;
+import java.util.*;
 
 /**
  * Immutable Roman Numeral, representing a value between {@link #MIN_VALUE} and
@@ -29,6 +28,10 @@ public class RomanNumeral {
 		'D', 500,
 		'M', 1000
 	);
+	
+	protected static final String [] roman = {"I", "V", "X", "L","C", "D", "M"};
+	protected static final int [] numerals = {1, 5, 10, 50, 100, 500, 1000 };
+	
 			
 	private final int value;
 	private String text;
@@ -81,13 +84,40 @@ public class RomanNumeral {
 		return text;
 	}
 	
+
 	@VisibleForTesting
 	protected static int convertFromStringToInt(String s) {
-		return 0;
+		
+		char [] romanNums = s.toCharArray();
+
+		int numericValue = 0;
+		
+		for(char c: romanNums)
+		{ numericValue += LETTERS_TO_VALUES.get(c); }
+		
+		return numericValue;
 	}
 	
+	
 	@VisibleForTesting
-	protected static String convertFromIntToString(int n) {
-		return null;
+	protected static String convertFromIntToString(int num) {
+		
+		if(num > MAX_VALUE || num < MIN_VALUE)
+		{
+			throw new IllegalArgumentException("Number out of bounds");
+		}
+
+		StringBuilder str = new StringBuilder();
+		
+		for (int i=roman.length-1; i >= 0; i--){
+			while(num >= numerals[i]) 
+			{
+				str.append(roman[i]);
+				num -= numerals[i];
+			}
+				
+		}
+		return str.toString();
+		
 	}
 }
