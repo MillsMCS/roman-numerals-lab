@@ -1,4 +1,3 @@
 # Roman Numerals
-This is for CS 180A/280A Spring 2022.
-
-Jasmin Garcia
+Class Project
+Created a Java Application using Eclipse to convert regular numbers to Roman Numerals and Vice Versa.
